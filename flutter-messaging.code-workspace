@@ -1,0 +1,16 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"dart.allowAnalytics": false,
+		"files.exclude": {
+			"**/.*": true,
+			"**/*.lock": true,
+			"build/": true
+		},
+		"editor.formatOnSave": true,
+	}
+}
