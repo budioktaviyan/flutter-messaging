@@ -45,12 +45,20 @@ class _HomePageState extends State<HomePage> {
       print("FCM Token : $token");
     });
 
-    messaging.configure(onMessage: (Map<String, dynamic> message) async {
-      print(message);
-    }, onResume: (Map<String, dynamic> message) async {
-      print(message);
-    }, onLaunch: (Map<String, dynamic> message) async {
-      print(message);
-    });
+    messaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print(message);
+        },
+        onBackgroundMessage: backgroundMessageHandler,
+        onResume: (Map<String, dynamic> message) async {
+          print(message);
+        },
+        onLaunch: (Map<String, dynamic> message) async {
+          print(message);
+        });
   }
+}
+
+Future backgroundMessageHandler(Map<String, dynamic> message) async {
+  print(message);
 }
