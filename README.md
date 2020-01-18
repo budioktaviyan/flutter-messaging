@@ -1,2 +1,2 @@
-# flutter-messaging
+# Flutter Messaging
 Firebase Cloud Messaging example for Flutter
