@@ -11,6 +11,7 @@
       android:fullBackupContent="false"
       android:icon="@mipmap/ic_launcher"
       android:label="Messaging"
+      android:supportsRtl="false"
       tools:ignore="GoogleAppIndexingWarning">
 
     <activity
