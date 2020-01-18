@@ -1,24 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="id.flutter.messaging">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <application
-        android:name="io.flutter.app.FlutterApplication"
-        android:label="Messaging"
-        android:icon="@mipmap/ic_launcher">
-        <activity
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/LaunchTheme"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
-        </activity>
-        <meta-data
-            android:name="flutterEmbedding"
-            android:value="2" />
-    </application>
+          xmlns:tools="http://schemas.android.com/tools"
+          package="id.flutter.messaging">
+
+  <uses-permission android:name="android.permission.INTERNET" />
+
+  <application
+      android:name="io.flutter.app.FlutterApplication"
+      android:allowBackup="false"
+      android:fullBackupContent="false"
+      android:icon="@mipmap/ic_launcher"
+      android:label="Messaging"
+      tools:ignore="GoogleAppIndexingWarning">
+
+    <activity
+        android:name=".MainActivity"
+        android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+        android:hardwareAccelerated="true"
+        android:launchMode="singleTop"
+        android:theme="@style/LaunchTheme"
+        android:windowSoftInputMode="adjustResize">
+
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+
+      <intent-filter>
+        <action android:name="FLUTTER_NOTIFICATION_CLICK" />
+        <category android:name="android.intent.category.DEFAULT" />
+      </intent-filter>
+    </activity>
+
+    <meta-data
+        android:name="flutterEmbedding"
+        android:value="2" />
+  </application>
 </manifest>

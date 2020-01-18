@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() => runApp(App());
 
@@ -19,14 +20,37 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final FirebaseMessaging messaging = FirebaseMessaging();
+
   @override
   void initState() {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarIconBrightness: Brightness.dark,
+    ));
+
     super.initState();
-    FirebaseMessaging messaging = FirebaseMessaging();
+    _configureMessaging();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold();
+  }
+
+  void _configureMessaging() {
+    messaging.getToken().then((String token) async {
+      print("FCM Token : $token");
+    });
+
+    messaging.configure(onMessage: (Map<String, dynamic> message) async {
+      print(message);
+    }, onResume: (Map<String, dynamic> message) async {
+      print(message);
+    }, onLaunch: (Map<String, dynamic> message) async {
+      print(message);
+    });
   }
 }
