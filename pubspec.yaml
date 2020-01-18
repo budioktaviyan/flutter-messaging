@@ -10,6 +10,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^0.1.2
+  firebase_messaging: ^6.0.9
 
 flutter:
   uses-material-design: true
