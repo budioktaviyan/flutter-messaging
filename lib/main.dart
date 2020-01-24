@@ -1,6 +1,11 @@
+import 'dart:io';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+var localMessaging = new FlutterLocalNotificationsPlugin();
 
 void main() => runApp(App());
 
@@ -41,24 +46,54 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _configureMessaging() {
+    var android =
+        new AndroidInitializationSettings('@drawable/ic_notification');
+    var iOS = new IOSInitializationSettings();
+    var settings = new InitializationSettings(android, iOS);
+
+    localMessaging.initialize(
+      settings,
+      onSelectNotification: _onSelectNotification,
+    );
+
     messaging.getToken().then((String token) async {
       print("FCM Token : $token");
     });
 
     messaging.configure(
         onMessage: (Map<String, dynamic> message) async {
-          print(message);
+          print("onMessage: $message");
         },
-        onBackgroundMessage: backgroundMessageHandler,
+        onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
         onResume: (Map<String, dynamic> message) async {
-          print(message);
+          print("onResume: $message");
         },
         onLaunch: (Map<String, dynamic> message) async {
-          print(message);
+          print("onLaunch: $message");
         });
+  }
+
+  Future _onSelectNotification(String data) async {
+    print("onSelectNotification: $data");
   }
 }
 
 Future backgroundMessageHandler(Map<String, dynamic> message) async {
-  print(message);
+  var android = new AndroidNotificationDetails(
+    'messaging',
+    'Messaging',
+    'Firebase Cloud Messaging example for Flutter',
+    importance: Importance.Max,
+    priority: Priority.High,
+  );
+  var iOS = new IOSNotificationDetails();
+  var notificationDetails = NotificationDetails(android, iOS);
+
+  localMessaging.show(
+    1,
+    message["data"]["title"],
+    message["data"]["body"],
+    notificationDetails,
+    payload: message["data"]["payload"],
+  );
 }
