@@ -7,7 +7,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 var localMessaging = new FlutterLocalNotificationsPlugin();
 
-void main() => runApp(App());
+void main() {
+  runApp(App());
+  configureMessaging();
+}
 
 class App extends StatelessWidget {
   @override
@@ -25,8 +28,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final FirebaseMessaging messaging = FirebaseMessaging();
-
   @override
   void initState() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -37,45 +38,44 @@ class _HomePageState extends State<HomePage> {
     ));
 
     super.initState();
-    _configureMessaging();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold();
   }
+}
 
-  void _configureMessaging() {
-    var android =
-        new AndroidInitializationSettings('@drawable/ic_notification');
-    var iOS = new IOSInitializationSettings();
-    var settings = new InitializationSettings(android, iOS);
+void configureMessaging() {
+  var android = new AndroidInitializationSettings('@drawable/ic_notification');
+  var iOS = IOSInitializationSettings();
+  var settings = InitializationSettings(android, iOS);
 
-    localMessaging.initialize(
-      settings,
-      onSelectNotification: _onSelectNotification,
-    );
+  localMessaging.initialize(
+    settings,
+    onSelectNotification: _onSelectNotification,
+  );
 
-    messaging.getToken().then((String token) async {
-      print("FCM Token : $token");
-    });
+  final FirebaseMessaging messaging = FirebaseMessaging();
+  messaging.getToken().then((String token) async {
+    print("FCM Token : $token");
+  });
 
-    messaging.configure(
-        onMessage: (Map<String, dynamic> message) async {
-          print("onMessage: $message");
-        },
-        onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
-        onResume: (Map<String, dynamic> message) async {
-          print("onResume: $message");
-        },
-        onLaunch: (Map<String, dynamic> message) async {
-          print("onLaunch: $message");
-        });
-  }
+  messaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onBackgroundMessage: Platform.isIOS ? null : backgroundMessageHandler,
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      });
+}
 
-  Future _onSelectNotification(String data) async {
-    print("onSelectNotification: $data");
-  }
+Future _onSelectNotification(String data) async {
+  print("onSelectNotification: $data");
 }
 
 Future backgroundMessageHandler(Map<String, dynamic> message) async {
@@ -89,11 +89,12 @@ Future backgroundMessageHandler(Map<String, dynamic> message) async {
   var iOS = new IOSNotificationDetails();
   var notificationDetails = NotificationDetails(android, iOS);
 
+  int id = int.tryParse(message["data"]["id"].toString()) ?? 1;
   localMessaging.show(
-    1,
+    id,
     message["data"]["title"],
     message["data"]["body"],
     notificationDetails,
-    payload: message["data"]["payload"],
+    payload: message["data"]["data"],
   );
 }
